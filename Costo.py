@@ -1,12 +1,13 @@
 import pandas as pd
 
 class Cost():
-    def __init__(self, treeType, dataframe):
+    def __init__(self, treeType, state, dataframe):
         self.dataframe = dataframe
         self.treeType = treeType
+        self.state = state
 
     def getTypeDF (self):
-        typeDF = self.dataframe[self.dataframe['type'] == self.treeType].iloc[0]
+        typeDF = self.dataframe[(self.dataframe['type'] == self.treeType) and (self.dataframe['STATE'] == self.state)].iloc[0]
         return typeDF
 
     def getManPower (self):
