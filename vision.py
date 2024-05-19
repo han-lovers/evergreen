@@ -7,6 +7,7 @@ import sympy
 
 class Trees:
     def __init__(self, distance, image_path):
+        self.intersections = None
         r = distance
 
         # Import image to get height
@@ -63,7 +64,7 @@ class Trees:
             i = i+1
 
         #print(image.shape)
-        cv2.circle(annotated_image, (503, 490), 15, (0, 255, 0), 5)
+
         # Store the annotated image and the tree roots
         self.annotated_image = annotated_image
         self.treeroots = treeroots
@@ -71,9 +72,25 @@ class Trees:
         # Store the original image and the ellipses
         self.image = image
         self.radius = radius
+        self.xs = xs
 
     def get_image(self):
-        sv.plot_image(self.annotated_image)
+        return (self.annotated_image)
+
+    def contrast_terrain(self, x, y, dirt_image_path, grass_image_path):
+        # Load the images
+        dirt_image = cv2.imread(dirt_image_path)
+        grass_image = cv2.imread(grass_image_path)
+
+         # Get the pixel color in both images
+        dirt_pixel = dirt_image[y, x]
+        grass_pixel = grass_image[y, x]
+
+        # Check if the pixel is not black in either image
+        if not all(value == 0 for value in dirt_pixel) or not all(value == 0 for value in grass_pixel):
+            return True
+
+        return False
 
     def get_intersection_points(self):
         intersections = []
@@ -104,10 +121,19 @@ class Trees:
         for intersection in intersections:
             for coordinate in intersection:
                 x, y = coordinate
-                cv2.circle(self.annotated_image, (int(x), 1280 - int(y)), 5, (255, 0, 0), 5)
+                condition = self.contrast_terrain(int(x), 1280 - int(y), "Dirt.jpg", "Grass.jpg")
+                if condition is True:
+                    cv2.circle(self.annotated_image, (int(x), 1280 - int(y)), 5, (255, 0, 0), 5)
 
 
         sv.plot_image(self.annotated_image)
+        self.intersections = intersections
 
-        return intersections
+        return self.annotated_image
+
+    def get_count(self):
+        return len(self.xs)
+
+
+
 

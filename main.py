@@ -1,7 +1,49 @@
+import os
+
 import streamlit as st
+from PIL import Image
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 from geopy.distance import geodesic
+from vision import Trees
+import supervision as sv
+from fertileLand import fertileLand
+
+editedphoto = None
+#file upload
+uploaded_file = st.file_uploader("Upload photo")
+# Get the directory of the current script
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
+if os.path.exists('saved_image.jpeg'):
+    os.remove('saved_image.jpeg')
+
+if uploaded_file is not None:
+    #image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file)
+    st.image(image, caption='Uploaded Image.', use_column_width=True)
+
+    # Save the image
+    image_path = os.path.join(current_dir, 'saved_image.jpeg')  # specify the path to save the image
+    image.save(image_path)
+    col1, col2, col3 = st.columns(3)
+
+    if st.button('Hacer estudio'):
+        tree = Trees(700, "saved_image.jpeg")
+        count = tree.get_count()
+        a = tree.get_image()
+        with col2:
+            st.image(a, caption='Found ' + str(count) + " main trees.", use_column_width=True)
+        land = fertileLand("saved_image.jpeg", 11000)
+        grass, dirt = land.get_image()
+        with col1:
+            st.image(grass, caption='Grass.', use_column_width=True)
+        with col3:
+            st.image(dirt, caption='Dirt.', use_column_width=True)
+
+        b = tree.get_intersection_points()
+
+        st.image(b, caption='Recommended trees on red spots.', use_column_width=True)
 
 # Inicializar geocodificador
 geolocator = Nominatim(user_agent="pruebas")
