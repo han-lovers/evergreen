@@ -42,9 +42,10 @@ try:
                 st.error("Ubicación no encontrada. Intenta usar coordenadas.")
                 st.stop()
             location1_coords = (location1.latitude, location1.longitude)
+            location1_coordReverse = geolocator.reverse(location1_coords)
             st.write(f"Coordenadas de la ubicación ingresada: {location1_coords}")
-            stringDireccion = location1.address
-            estado = obtener_estado(location1)
+            stringDireccion = location1_coordReverse.address
+            estado = obtener_estado(location1_coordReverse)
             st.write(f"Estado: {estado}")
     else:
         location1_coords_str = st.text_input("Ingresa las coordenadas de tu ubicación (lat, long):")
@@ -80,4 +81,4 @@ try:
 
         st.write(f"La región más cercana es {listaNombres[indiceValorMinimo]} con una distancia de {valorMinimo:.2f} kilómetros.")
 except Exception as e:
-    st.error(f"Error: {e}")
+    st.error("Error, intenta usando coordenadas.")
