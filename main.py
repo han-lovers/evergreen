@@ -9,75 +9,71 @@ geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2)
 reverse = RateLimiter(geolocator.reverse, min_delay_seconds=2)
 
 
-def funcionDistancia(location1, location2):
-    location2_coords = tuple(map(float, location2.split(", ")))
-    distancia = geodesic(location1, location2_coords).kilometers
-    return distancia
+def distanceFunction(location1, location2):
+    location2Coords = tuple(map(float, location2.split(", ")))
+    distance = geodesic(location1, location2Coords).kilometers
+    return distance
 
 
-def obtener_estado(location):
+def getState(location):
     address = location.raw['address']
-    estado = address.get('state', 'No encontrado')
-    return estado
+    state = address.get('state', 'Not found')
+    return state
 
 
-diccionarioEstados = ["Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Chiapas", "Chihuahua",
-                      "Ciudad de México", "Coahuila", "Colima", "Durango", "Estado de México", "Guanajuato",
-                      "Guerrero", "Hidalgo", "Jalisco", "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca",
-                      "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco",
-                      "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas"]
+st.title('Find the closest region')
 
-st.title('Encuentra la región más cercana')
+option = st.radio("Choose the entry format:", ('Address', 'Coordinates'))
 
-option = st.radio("Elige el método de entrada:", ('Dirección', 'Coordenadas'))
-
-stringDireccion = ""
+stringAddress = ""
 
 try:
-    if option == 'Dirección':
-        location1_name = st.text_input("Ingresa tu dirección:")
-        if location1_name:
-            location1 = geolocator.geocode(location1_name)
+    if option == 'Address':
+        location1Name = st.text_input("Type you address:")
+        if location1Name:
+            location1 = geolocator.geocode(location1Name)
             if not location1:
-                st.error("Ubicación no encontrada. Intenta usar coordenadas.")
+                st.error("Address not found, try using coordinates.")
                 st.stop()
-            location1_coords = (location1.latitude, location1.longitude)
-            st.write(f"Coordenadas de la ubicación ingresada: {location1_coords}")
-            stringDireccion = location1.address
-            estado = obtener_estado(location1)
-            st.write(f"Estado: {estado}")
+            location1Coords = (location1.latitude, location1.longitude)
+            location1_coordReverse = geolocator.reverse(location1Coords)
+            st.write(f"Coordinates of the given address: {location1Coords}")
+            stringAddress = location1_coordReverse.address
+            state = getState(location1_coordReverse)
+            st.write(f"State: {state}")
     else:
-        location1_coords_str = st.text_input("Ingresa las coordenadas de tu ubicación (lat, long):")
-        if location1_coords_str:
-            location1_coords = tuple(map(float, location1_coords_str.split(", ")))
-            location1 = geolocator.reverse(location1_coords)
+        location1CoordsStr = st.text_input("Type in your coordinates.  (lat, long):")
+        if location1CoordsStr:
+            location1Coords = tuple(map(float, location1CoordsStr.split(", ")))
+            location1 = geolocator.reverse(location1Coords)
             if not location1:
-                st.error("Ubicación no encontrada.")
+                st.error("Address not found.")
                 st.stop()
-            st.write(f"Dirección de las coordenadas ingresadas: {location1.address}")
-            stringDireccion = location1.address
-            estado = obtener_estado(location1)
-            st.write(f"Estado: {estado}")
+            st.write(f"Address of the given coordinates: {location1.address}")
+            stringAddress = location1.address
+            state = getState(location1)
+            st.write(f"State: {state}")
 
-    if (option == 'Dirección' and location1_name) or (option == 'Coordenadas' and location1_coords_str):
+    if (option == 'Address' and location1Name) or (option == 'Coordinates' and location1CoordsStr):
         # Coordenadas de las regiones
-        noroeste = "28.77068233170991, -110.61761330069028"
-        noreste = "27.3477085247903, -101.89562544155896"
-        centronorte = "22.414706207933026, -101.69666847368826"
-        occidente = "20.63446861402605, -103.36662687985577"
-        oriente = "19.193128608378363, -96.40063880385492"
-        centrosur = "19.55583193741181, -99.86956345401865"
-        suroeste = "16.31636212721643, -96.54839051155398"
-        sureste = "19.89338541488356, -88.94002917586535"
+        northWest = "28.77068233170991, -110.61761330069028"
+        northEast = "27.3477085247903, -101.89562544155896"
+        northCenter = "22.414706207933026, -101.69666847368826"
+        west = "20.63446861402605, -103.36662687985577"
+        east = "19.193128608378363, -96.40063880385492"
+        southCenter = "19.55583193741181, -99.86956345401865"
+        southWest = "16.31636212721643, -96.54839051155398"
+        southEast = "19.89338541488356, -88.94002917586535"
 
-        listaRegiones = [noroeste, noreste, centronorte, occidente, oriente, centrosur, suroeste, sureste]
-        listaNombres = ["norOeste", "norEste", "centroNorte", "occidente", "oriente", "centroSur", "surOeste", "surEste"]
+        regionList = [northWest, northEast, northCenter, west, east, southCenter, southWest, southEast]
+        namesList = ["North West", "North East", "North Center", "West",
+                        "East", "South Center", "South West", "South East"]
 
         # Calcular distancias y encontrar la mínima
-        listaDistancias = [funcionDistancia(location1_coords, region) for region in listaRegiones]
-        valorMinimo = min(listaDistancias)
-        indiceValorMinimo = listaDistancias.index(valorMinimo)
+        distanceList = [distanceFunction(location1Coords, region) for region in regionList]
+        minValue = min(distanceList)
+        minValueIndex = distanceList.index(minValue)
 
-        st.write(f"La región más cercana es {listaNombres[indiceValorMinimo]} con una distancia de {valorMinimo:.2f} kilómetros.")
+        st.write(f"The closest region is {namesList[minValueIndex]} with a distance of {minValue:.2f} kilometers.")
 except Exception as e:
-    st.error(f"Error: {e}")
+    st.error("Error, try using coordinates.")
