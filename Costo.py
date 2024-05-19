@@ -1,7 +1,6 @@
 class Cost():
-    def __init__(self, state, infrastructure): # constructor
+    def __init__(self, state): # constructor
         self.state = state
-        self.infrastructure = infrastructure
         self.MANPOWERDICTIONARY = {'Aguascalientes':0.0,  # idicex of incrementes from every state
                                    'Baja California':11.7,
                                    'Baja California Sur':1.8,
