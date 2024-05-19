@@ -17,6 +17,7 @@ def get_top_five(mainDataFrame, state, region, dataFrameRegion='REGION', dataFra
     topFiveTrees = (specificZoneTrees['SPECIES'].value_counts()).head()
     topFiveTrees = topFiveTrees.index.to_list()  # Transform the values into a list with the Species
 
+    # Return type is a list
     return topFiveTrees
 
 
