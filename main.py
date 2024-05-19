@@ -97,7 +97,7 @@ def compare_strings(stringOne, stringTwo):
 # Function that shows the first 5 images from the tree selected
 def TreeImages(query):
     API_KEY = 'AIzaSyBCpNc-AXT-4oFIFovHxGrXeEmQoGex43M'
-    SEARCH_ENGINE_ID = '03d887cb843cf464e'
+    SEARCH_ENGINE_ID = '541decfaa63aa45bf'
 
     search_query = query + ' tree'
 
@@ -258,10 +258,90 @@ try:
 
         if st.button('View'):
             for i in range(len(topFiveTrees)):
-                st.write(f"{topFiveTrees[i]}")
+                #st.write(f"{topFiveTrees[i]}")
                 TreeImages(topFiveTrees[i])
-                #st.image(TreeImages(topFiveTrees[i]))
+                st.image(TreeImages(topFiveTrees[i]))
+
+
+        # User chooses the main tree
+        st.title('Main tree')
+        treeSelection = st.radio("\nFrom the previous trees, select the option you desire: ", (f'1. {topFiveTrees[0]}', f'2. {topFiveTrees[1]}', f'3. {topFiveTrees[2]}', f'4. {topFiveTrees[3]}', f'5. {topFiveTrees[4]}'))
+
+        # using if to create the variable of the selected tree
+        if treeSelection == f'1. {topFiveTrees[0]}':
+            selectedTree = topFiveTrees[0]
+        elif treeSelection == f'2. {topFiveTrees[1]}':
+            selectedTree = topFiveTrees[1]
+        elif treeSelection == f'3. {topFiveTrees[2]}':
+            selectedTree = topFiveTrees[2]
+        elif treeSelection == f'4. {topFiveTrees[3]}':
+            selectedTree = topFiveTrees[3]
+        else:
+            selectedTree = topFiveTrees[4]
+
+        st.write('Qualities and maintenance of the tree:')
+
+        # shows the links of the tree
+        if st.button('Enter'):
+            st.write(Maintenance(selectedTree))
+
+
+        st.title('Estimated cost: ')
+
+        MANPOWERDICTIONARY = {'Aguascalientes': 0.0,  # index of increments from every state
+                              'Baja California': 11.7,
+                              'Baja California Sur': 1.8,
+                              'Campeche': 4.8,
+                              'Chiapas': 10.0,
+                              'Chihuahua': 5,
+                              'Coahuila': 3.9,
+                              'Colima': 4.2,
+                              'Durango': 4.9,
+                              'Guanajuato': 2.2,
+                              'Guerrero': 8.8,
+                              'Hidalgo': 10.8,
+                              'Jalisco': 3.5,
+                              'México': 4.3,
+                              'Michoacán': 7.2,
+                              'Morelos': 4.1,
+                              'Nayarit': 3.2,
+                              'Nuevo León': 3.7,
+                              'Oaxaca': 8.5,
+                              'Puebla': 6.5,
+                              'Querétaro': 6.4,
+                              'Quintana Roo': 6.6,
+                              'San Luis Potosí': 13.9,
+                              'Sinaloa': 11.0,
+                              'Sonora': 5.7,
+                              'Tabasco': 6.6,
+                              'Tamaulipas': 5.0,
+                              'Tlaxcala': 7.2,
+                              'Veracruz': 8.2,
+                              'Yucatán': 0.7,
+                              'Zacatecas': -4.5}
+        # the mean cost of manpower in México
+        MEDIA = 111.77
+
+        # question on the quality of the infrastructure to see how many estimated porcentage we add to the final cost
+        st.write('\nFrom the following options (Good (3), Regular(2), Bad(1))...')
+        level = st.slider(
+            'What is the level of infrastructure like? (How difficult is it to arrive to the destination place or to carry instruments):',
+            1, 3)
+
+        if st.button('Calcular'):
+            index = MANPOWERDICTIONARY[self.state] + 100
+            manPower = (MEDIA * index) / 100
+
+            if self.level ==1:
+                cost = manPower() * 1.02
+            elif level == 2:
+                cost = manPower() * 1.01
+            else:
+                cost = manPower() * 1.005
+
+            result = 'The estimated cost of planting a tree in {} is: ${}'.format(self.state, cost)
+
+            st.write(result)
 
 except Exception as e:
     st.error("Error, try using coordinates.")
-
