@@ -202,10 +202,9 @@ try:
                 st.stop()
             location1Coords = (location1.latitude, location1.longitude)
             location1_coordReverse = geolocator.reverse(location1Coords)
-            st.write(f"Coordinates of the given address: {location1Coords}")
             stringAddress = location1_coordReverse.address
             state = getState(location1_coordReverse)
-            st.write(f"State: {state}")
+
     else:
         location1CoordsStr = st.text_input("Type in your coordinates.  (lat, long):")
         if location1CoordsStr:
@@ -214,10 +213,9 @@ try:
             if not location1:
                 st.error("Address not found.")
                 st.stop()
-            st.write(f"Address of the given coordinates: {location1.address}")
             stringAddress = location1.address
             state = getState(location1)
-            st.write(f"State: {state}")
+
     if (option == 'Address' and location1Name) or (option == 'Coordinates' and location1CoordsStr):
         # Coordenadas de las regiones
         northWest = "28.77068233170991, -110.61761330069028"
@@ -239,8 +237,6 @@ try:
         minValueIndex = distanceList.index(minValue)
 
         region = namesList[minValueIndex]
-
-        st.write(f"The closest region is {namesList[minValueIndex]} with a distance of {minValue:.2f} kilometers.")
 
         # Verify the similarity on the strings
         state = compare_strings(state, mexicanTreesDf['STATE'])
