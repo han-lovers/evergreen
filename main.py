@@ -183,7 +183,7 @@ topFiveTrees = get_top_five(mexicanTreesDf, state, listaNombres[indiceValorMinim
 
 # Iterate in the top 5 to print them 1 by 1
 for i in range(len(topFiveTrees)):
-    print(f'The option {i + 1} is: {topFiveTrees[i]}')
+    st.write(f'The option {i + 1} is: {topFiveTrees[i]}')
 
 # Function that shows the first 5 images from the tree selected
 def TreeImages(query):
@@ -205,11 +205,11 @@ def TreeImages(query):
     results = response.json()['items']
 
     for item in results[:5]:
-        print(item['link'])
+        st.write(item['link'])
 
 # Shows the first 5 images of the top five trees
 for i in range(len(topFiveTrees)):
-    print(TreeImages(topFiveTrees[i]))
+    st.image(TreeImages(topFiveTrees[i]))
 
 # User chooses the main tree
 treeSelection = st.radio("\nFrom the previous trees, select the option you desire: ", (1,2,3,4,5))
@@ -227,7 +227,7 @@ elif treeSelection == 4:
 else:
     selectedTree = topFiveTrees[4]
 
-# se calcula el costo del arbol
+# we calculate the estimated cost
 class Cost():
     def __init__(self, state): # constructor
         self.state = state
@@ -270,13 +270,13 @@ class Cost():
         return manPower
 
     def setInfrastructure(self): # question on the quality of the infrastructure to see how many estimated porcentage we add to the final cost
-        print('\nFrom the following options (Good, Bad, Regular) write the correct one...')
-        level = input('What is the level of infrastructure like? (How difficult is it to arrive to the destination place or to carry instruments): ')
+        st.write('\nFrom the following options (Good, Bad, Regular) write the correct one...')
+        level = text.input('What is the level of infrastructure like? (How difficult is it to arrive to the destination place or to carry instruments): ')
 
         # validates the input
         valid_levels = {'good','Good','GOOD','Bad','bad','Bad','regular','Regular','REGULAR'}
         while level not in valid_levels:
-            print('Error! The input is incorrect.')
+            st.error('Error! The input is incorrect.')
             level =input('Try again: ')
 
         self.level = level
@@ -293,6 +293,11 @@ class Cost():
         result = 'The estimated cost of planting a tree in {} is: ${}'.format(self.state, cost)
         return result
 
-# calls an object from the class to calculate the estimated code
-finalCost = Cost(state)
-print(finalCost)
+# Implement the Cost class
+estimatedCost = Cost(state) # Let's assume we are working again with Durango state
+
+# Ask user for the infrastructure
+estimatedCost.setInfrastructure()
+# Calculate the estimated cost
+estimatedCost = estimatedCost.calculate()
+st.write(f"{estimatedCost}") # Print the estimated cost
