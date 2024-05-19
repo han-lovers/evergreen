@@ -6,6 +6,20 @@ import pandas as pd
 # from itertools import combinations
 # from thefuzz import fuzz, process
 
+# Function to get the top five trees from a specific region
+# NOTE: The first parameter MUST be the main dataframe, second and third parameters
+# MUST be strings and fourth and fifth parameters are optional
+def get_top_five(mainDataFrame, state, region, dataFrameRegion='REGION', dataFrameState='STATE'):
+    # Look for the trees in a specific region and state
+    specificZoneTrees = mainDataFrame.loc[
+        (mainDataFrame[dataFrameRegion] == region) & (mainDataFrame[dataFrameState] == state)]
+    # Get the top 5 trees in a specific region and state
+    topFiveTrees = (specificZoneTrees['SPECIES'].value_counts()).head()
+    topFiveTrees = topFiveTrees.index.to_list()  # Transform the values into a list with the Species
+
+    return topFiveTrees
+
+
 # Get the df of the mexican trees
 mexicanTreesDf = pd.read_csv('mexican_trees.csv')
 
@@ -54,12 +68,8 @@ regionsDf = pd.concat([onlyStatesDf, onlyRegionsDf], axis=1)
 # Merge the original DataFrame with the regions DataFrame on the 'STATE' column
 mexicanTreesDf = pd.merge(mexicanTreesDf, regionsDf, on='STATE', how='left')
 
-# Look for the trees in a specific region and state
-specificZoneTrees = mexicanTreesDf.loc[(mexicanTreesDf['REGION'] == 'Northwest') & (mexicanTreesDf['STATE'] == 'Durango')]
-
-# Get the top 5 trees in a specific region and state
-topFiveTrees = (specificZoneTrees['SPECIES'].value_counts()).head()
-topFiveTrees = topFiveTrees.index.to_list() # Transform the values into a list with the Species
+# Implement function get_top_five
+topFiveTrees = get_top_five(mexicanTreesDf, 'Durango', 'Northwest')
 
 # Iterate in the top 5 to print them 1 by 1
 for i in range(len(topFiveTrees)):
