@@ -81,5 +81,3 @@ try:
         st.write(f"La región más cercana es {listaNombres[indiceValorMinimo]} con una distancia de {valorMinimo:.2f} kilómetros.")
 except Exception as e:
     st.error(f"Error: {e}")
-
-st.write("Me gusta ema")
