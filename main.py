@@ -74,6 +74,6 @@ try:
         minValue = min(distanceList)
         minValueIndex = distanceList.index(minValue)
 
-        st.write(f"La región más cercana es {namesList[minValueIndex]} con una distancia de {minValue:.2f} kilómetros.")
+        st.write(f"The closest region is {namesList[minValueIndex]} with a distance of {minValue:.2f} kilometers.")
 except Exception as e:
-    st.error("Error, intenta usando coordenadas.")
+    st.error("Error, try using coordinates.")
