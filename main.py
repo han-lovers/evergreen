@@ -161,6 +161,41 @@ regionsDict = {
     'Southeast': ['Campeche', 'Quintana Roo', 'Tabasco', 'Yucatán']
 }
 
+# Manpower costs dictionary
+manpowerIndex = {'Aguascalientes':0.0,
+    'Baja California':11.7,
+    'Baja California Sur':1.8,
+    'Campeche':4.8,
+    'Chiapas':10.0,
+    'Chihuahua':5,
+    'Coahuila':3.9,
+    'Colima':4.2,
+    'Durango':4.9,
+    'Guanajuato':2.2,
+    'Guerrero':8.8,
+    'Hidalgo':10.8,
+    'Jalisco':3.5,
+    'México':4.3,
+    'Michoacán':7.2,
+    'Morelos':4.1,
+    'Nayarit':3.2,
+    'Nuevo León':3.7,
+    'Oaxaca':8.5,
+    'Puebla':6.5,
+    'Querétaro':6.4,
+    'Quintana Roo':6.6,
+    'San Luis Potosí':13.9,
+    'Sinaloa':11.0,
+    'Sonora':5.7,
+    'Tabasco': 6.6,
+    'Tamaulipas':5.0,
+    'Tlaxcala':7.2,
+    'Veracruz':8.2,
+    'Yucatán':0.7,
+    'Zacatecas':-4.5}
+
+manPowerMedia = 111.77
+
 # Create the regions list
 regions = create_regions_list(states)
 
@@ -216,6 +251,7 @@ stringAddress = ""
 
 state = ''
 region = ''
+stateName = ''
 try:
     if option == 'Address':
         location1Name = st.text_input("Type your address:")
@@ -240,6 +276,11 @@ try:
             stringAddress = location1.address
             state = getState(location1)
             st.write(f"Address for the given coordinates: {location1.address}")
+
+    # Iterate over the states and check if the string is similar to the one obtained
+    for i in range(len(states)):
+        if fuzz.partial_ratio(state, states[i]) > 90:
+            stateName = states[i]
 
     if (option == 'Address' and location1Name) or (option == 'Coordinates' and location1CoordsStr):
         # Coordenadas de las regiones
@@ -308,6 +349,27 @@ try:
         # shows the links of the tree
         if st.button('Enter'):
             st.write(Maintenance(selectedTree))
+
+        # Display a Title to ask for the cost of the manpower
+        st.title('Estimated Costs.')
+
+        # Give instructions and wait for answer
+        st.write('From the following options (Good (3), Regular(2), Bad(1)):')
+        selection = st.radio('Choose any option:', ('1', '2', '3'))
+
+        index = manpowerIndex[stateName] + 100
+        manPower = (manPowerMedia * index) / 100
+
+        # Calculate the estimated cost depending on the selection
+        if selection == '1':
+            estimatedCost = manPower * 1.02
+        elif selection == '2':
+            estimatedCost = manPower * 1.01
+        else:
+            estimatedCost = manPower * 1.005
+
+        # Show how much is the estimated amount
+        st.write(f'The estimated cost is: ${estimatedCost}')
 
 except Exception as e:
     st.error("Error, try using coordinates.")
