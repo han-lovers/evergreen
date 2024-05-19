@@ -1,7 +1,7 @@
 class Cost():
-    def __init__(self, state, infrastructure): # constructor
+    def __init__(self, state, infrastucture): # constructor
         self.state = state
-        self.infrastructure = infrastructure
+        self.infrastructure = infrastucture
         self.MANPOWERDICTIONARY = {'Aguascalientes':0.0,  # idicex of incrementes from every state
                                    'Baja California':11.7,
                                    'Baja California Sur':1.8,
@@ -51,6 +51,7 @@ class Cost():
 
         self.level = level
 
+
     def calculate(self):
         if self.level =='Bad'or self.level == 'bad'or self.level == 'BAD':
             cost = self.getManPower() * 1.02
@@ -61,11 +62,3 @@ class Cost():
 
         result = 'The estimated cost of planting a tree in {} is: ${}'.format(self.state, cost)
         return result
-
-def main():
-    obj1=Cost('Michoacán',456)
-    print(obj1.getManPower())
-    print(obj1.setInfrastructure())
-    print(obj1.calculate())
-
-main()

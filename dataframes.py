@@ -1,4 +1,5 @@
 import pandas as pd
+from Costo import Cost
 # import math
 # import numpy as np
 # import matplotlib.pyplot as plt
@@ -102,3 +103,12 @@ topFiveTrees = get_top_five(mexicanTreesDf, 'Durango', 'Northwest')
 # Iterate in the top 5 to print them 1 by 1
 for i in range(len(topFiveTrees)):
     print(f'The option {i + 1} is: {topFiveTrees[i]}')
+
+# Implement the Cost class
+estimatedCost = Cost('Durango', 456) # Let's assume we are working again with Durango state
+
+# Ask user for the infrastructure
+estimatedCost.setInfrastructure()
+# Calculate the estimated cost
+estimatedCost = estimatedCost.calculate()
+print(estimatedCost) # Print the estimated cost
