@@ -96,8 +96,8 @@ def compare_strings(stringOne, stringTwo):
 
 # Function that shows the first 5 images from the tree selected
 def TreeImages(query):
-    API_KEY = 'AIzaSyBCpNc-AXT-4oFIFovHxGrXeEmQoGex43M'
-    SEARCH_ENGINE_ID = '03d887cb843cf464e'
+    API_KEY = 'AIzaSyBJd7v-fc-vvvkObY8yBwIsLTaK4XG6yb0'
+    SEARCH_ENGINE_ID = '3386aa3648dd74cba'
 
     search_query = query + ' tree'
 
