@@ -48,5 +48,8 @@ onlyStatesDf = pd.DataFrame(states, columns=['STATE'])
 # Create a df of only the regions
 onlyRegionsDf = pd.DataFrame(regions, columns=['REGION'])
 
+# Concat both of the previous df into one
 regionsDf = pd.concat([onlyStatesDf, onlyRegionsDf], axis=1)
-print(regionsDf)
+
+# Merge the original DataFrame with the regions DataFrame on the 'STATE' column
+mexicanTreesDf = pd.merge(mexicanTreesDf, regionsDf, on='STATE', how='left')
