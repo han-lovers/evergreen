@@ -25,7 +25,7 @@ regionsDict = {
     'Northcenter': ['Aguascalientes', 'Guanajuato', 'Querétaro', 'San Luis Potosí',
                'Zacatecas'],
     'Southcenter': ['Ciudad de México', 'México', 'Morelos'],
-    'Southwest': ['Chiapas',  'Guerrero', 'Oaxaca'],
+    'Southwest': ['Chiapas', 'Guerrero', 'Oaxaca'],
     'Southeast': ['Campeche', 'Quintana Roo', 'Tabasco', 'Yucatán']
 }
 
