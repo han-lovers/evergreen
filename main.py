@@ -107,7 +107,8 @@ def TreeImages(query):
         'q': search_query,
         'key': API_KEY,
         'cx': SEARCH_ENGINE_ID,
-        'searchType': 'image'
+        'searchType': 'image',
+        'num': 5
     }
 
     response = requests.get(url, params=params)
@@ -116,6 +117,29 @@ def TreeImages(query):
     for item in results[:5]:
         #st.image(item['link'])
         st.write(item['link'])
+
+# qualities of the selected tree
+def Maintenance(query):
+    API_KEY = 'AIzaSyBJd7v-fc-vvvkObY8yBwIsLTaK4XG6yb0'
+    SEARCH_ENGINE_ID = '3386aa3648dd74cba'
+
+    search_query = query + ' tree care'
+
+    url = 'https://www.googleapis.com/customsearch/v1'
+
+    params = {
+        'q': search_query,
+        'key': API_KEY,
+        'cx': SEARCH_ENGINE_ID,
+        'num': 5
+    }
+
+    response = requests.get(url, params=params)
+    results = response.json()['items']
+
+    for item in results[:5]:
+        st.write(item['link'])
+
 
 # Get the df of the mexican trees
 mexicanTreesDf = pd.read_csv('mexican_trees.csv')
@@ -258,10 +282,32 @@ try:
 
         if st.button('View'):
             for i in range(len(topFiveTrees)):
-                st.write(f"{topFiveTrees[i]}")
+                #st.write(f"{topFiveTrees[i]}")
                 TreeImages(topFiveTrees[i])
-                #st.image(TreeImages(topFiveTrees[i]))
+                st.image(TreeImages(topFiveTrees[i]))
+
+
+        # User chooses the main tree
+        st.title('Main tree')
+        treeSelection = st.radio("\nFrom the previous trees, select the option you desire: ", (f'1. {topFiveTrees[0]}', f'2. {topFiveTrees[1]}', f'3. {topFiveTrees[2]}', f'4. {topFiveTrees[3]}', f'5. {topFiveTrees[4]}'))
+
+        # using if to create the variable of the selected tree
+        if treeSelection == f'1. {topFiveTrees[0]}':
+            selectedTree = topFiveTrees[0]
+        elif treeSelection == f'2. {topFiveTrees[1]}':
+            selectedTree = topFiveTrees[1]
+        elif treeSelection == f'3. {topFiveTrees[2]}':
+            selectedTree = topFiveTrees[2]
+        elif treeSelection == f'4. {topFiveTrees[3]}':
+            selectedTree = topFiveTrees[3]
+        else:
+            selectedTree = topFiveTrees[4]
+
+        st.write('Qualities and maintenance of the tree:')
+
+        # shows the links of the tree
+        if st.button('Enter'):
+            st.write(Maintenance(selectedTree))
 
 except Exception as e:
     st.error("Error, try using coordinates.")
-
