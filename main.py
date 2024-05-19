@@ -263,4 +263,3 @@ try:
 
 except Exception as e:
     st.error("Error, try using coordinates.")
-
