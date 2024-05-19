@@ -9,6 +9,17 @@ from vision import Trees
 import supervision as sv
 from fertileLand import fertileLand
 
+def distanceFunction(location1, location2):
+    location2Coords = tuple(map(float, location2.split(", ")))
+    distance = geodesic(location1, location2Coords).kilometers
+    return distance
+
+def getState(location):
+    address = location.raw['address']
+    state = address.get('state', 'Not found')
+    return state
+
+
 editedphoto = None
 #file upload
 uploaded_file = st.file_uploader("Upload photo")
@@ -49,19 +60,6 @@ if uploaded_file is not None:
 geolocator = Nominatim(user_agent="pruebas")
 geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2)
 reverse = RateLimiter(geolocator.reverse, min_delay_seconds=2)
-
-
-def distanceFunction(location1, location2):
-    location2Coords = tuple(map(float, location2.split(", ")))
-    distance = geodesic(location1, location2Coords).kilometers
-    return distance
-
-
-def getState(location):
-    address = location.raw['address']
-    state = address.get('state', 'Not found')
-    return state
-
 
 st.title('Find the closest region')
 
