@@ -204,7 +204,7 @@ try:
             location1_coordReverse = geolocator.reverse(location1Coords)
             stringAddress = location1_coordReverse.address
             state = getState(location1_coordReverse)
-
+            st.write(f"Coordinates for the given coordinates: {location1Coords}")
     else:
         location1CoordsStr = st.text_input("Type in your coordinates.  (lat, long):")
         if location1CoordsStr:
@@ -215,6 +215,7 @@ try:
                 st.stop()
             stringAddress = location1.address
             state = getState(location1)
+            st.write(f"Address for the given coordinates: {location1.address}")
 
     if (option == 'Address' and location1Name) or (option == 'Coordinates' and location1CoordsStr):
         # Coordenadas de las regiones
@@ -263,3 +264,4 @@ try:
 
 except Exception as e:
     st.error("Error, try using coordinates.")
+
