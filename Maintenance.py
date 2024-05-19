@@ -1,9 +1,9 @@
 import requests
-def TreeImages(query):
+def Maintenance(query):
     API_KEY = 'AIzaSyBCpNc-AXT-4oFIFovHxGrXeEmQoGex43M'
     SEARCH_ENGINE_ID = '03d887cb843cf464e'
 
-    search_query = query + ' tree'
+    search_query = query + ' tree care'
 
     url = 'https://www.googleapis.com/customsearch/v1'
 
@@ -11,7 +11,6 @@ def TreeImages(query):
         'q': search_query,
         'key': API_KEY,
         'cx': SEARCH_ENGINE_ID,
-        'searchType': 'image'
     }
 
     response = requests.get(url, params=params)
