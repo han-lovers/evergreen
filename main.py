@@ -96,8 +96,8 @@ def compare_strings(stringOne, stringTwo):
 
 # Function that shows the first 5 images from the tree selected
 def TreeImages(query):
-    API_KEY = 'AIzaSyBCpNc-AXT-4oFIFovHxGrXeEmQoGex43M'
-    SEARCH_ENGINE_ID = '541decfaa63aa45bf'
+    API_KEY = 'AIzaSyBJd7v-fc-vvvkObY8yBwIsLTaK4XG6yb0'
+    SEARCH_ENGINE_ID = '3386aa3648dd74cba'
 
     search_query = query + ' tree'
 
@@ -107,7 +107,8 @@ def TreeImages(query):
         'q': search_query,
         'key': API_KEY,
         'cx': SEARCH_ENGINE_ID,
-        'searchType': 'image'
+        'searchType': 'image',
+        'num': 5
     }
 
     response = requests.get(url, params=params)
@@ -116,6 +117,29 @@ def TreeImages(query):
     for item in results[:5]:
         #st.image(item['link'])
         st.write(item['link'])
+
+# qualities of the selected tree
+def Maintenance(query):
+    API_KEY = 'AIzaSyBJd7v-fc-vvvkObY8yBwIsLTaK4XG6yb0'
+    SEARCH_ENGINE_ID = '3386aa3648dd74cba'
+
+    search_query = query + ' tree care'
+
+    url = 'https://www.googleapis.com/customsearch/v1'
+
+    params = {
+        'q': search_query,
+        'key': API_KEY,
+        'cx': SEARCH_ENGINE_ID,
+        'num': 5
+    }
+
+    response = requests.get(url, params=params)
+    results = response.json()['items']
+
+    for item in results[:5]:
+        st.write(item['link'])
+
 
 # Get the df of the mexican trees
 mexicanTreesDf = pd.read_csv('mexican_trees.csv')
@@ -284,64 +308,6 @@ try:
         # shows the links of the tree
         if st.button('Enter'):
             st.write(Maintenance(selectedTree))
-
-
-        st.title('Estimated cost: ')
-
-        MANPOWERDICTIONARY = {'Aguascalientes': 0.0,  # index of increments from every state
-                              'Baja California': 11.7,
-                              'Baja California Sur': 1.8,
-                              'Campeche': 4.8,
-                              'Chiapas': 10.0,
-                              'Chihuahua': 5,
-                              'Coahuila': 3.9,
-                              'Colima': 4.2,
-                              'Durango': 4.9,
-                              'Guanajuato': 2.2,
-                              'Guerrero': 8.8,
-                              'Hidalgo': 10.8,
-                              'Jalisco': 3.5,
-                              'México': 4.3,
-                              'Michoacán': 7.2,
-                              'Morelos': 4.1,
-                              'Nayarit': 3.2,
-                              'Nuevo León': 3.7,
-                              'Oaxaca': 8.5,
-                              'Puebla': 6.5,
-                              'Querétaro': 6.4,
-                              'Quintana Roo': 6.6,
-                              'San Luis Potosí': 13.9,
-                              'Sinaloa': 11.0,
-                              'Sonora': 5.7,
-                              'Tabasco': 6.6,
-                              'Tamaulipas': 5.0,
-                              'Tlaxcala': 7.2,
-                              'Veracruz': 8.2,
-                              'Yucatán': 0.7,
-                              'Zacatecas': -4.5}
-        # the mean cost of manpower in México
-        MEDIA = 111.77
-
-        # question on the quality of the infrastructure to see how many estimated porcentage we add to the final cost
-        st.write('\nFrom the following options (Good (3), Regular(2), Bad(1))...')
-        level = st.slider(
-            'What is the level of infrastructure like? (How difficult is it to arrive to the destination place or to carry instruments):',
-            1, 3)
-
-        if st.button('Calcular'):
-            index = MANPOWERDICTIONARY[self.state] + 100
-            manPower = (MEDIA * index) / 100
-
-            if self.level ==1:
-                cost = manPower() * 1.02
-            elif level == 2:
-                cost = manPower() * 1.01
-            else:
-                cost = manPower() * 1.005
-
-            result = 'The estimated cost of planting a tree in {} is: ${}'.format(self.state, cost)
-
-            st.write(result)
 
 except Exception as e:
     st.error("Error, try using coordinates.")
