@@ -6,6 +6,38 @@ import pandas as pd
 # from itertools import combinations
 # from thefuzz import fuzz, process
 
+# Function to get all the states in the main dataframe
+# NOTE: mainDataFrame MUST be a dataframe
+def get_df_states(mainDataFrame):
+    # Check how many states are in the db
+    statesList = []
+    for element in mainDataFrame['STATE']:
+        if element not in statesList:
+            statesList.append(element)  # Store the element in the statesList
+
+    # Return type is a list
+    return statesList
+
+# Function to create a list with the regions of the states
+# NOTE: the parameter MUST be a list with the states in the main df
+def create_regions_list(states_list):
+    # Create the regions list to store every state region
+    regsList = []
+
+    # Iterate over the states to find their region
+    for i in states_list:
+        foundRegion = None
+
+        for x, y in regionsDict.items():
+            if i in y:
+                foundRegion = x
+                break
+
+        regsList.append(foundRegion)  # Store the region
+
+    # Return datatype is a list
+    return regsList
+
 # Function to get the top five trees from a specific region
 # NOTE: The first parameter MUST be the main dataframe, second and third parameters
 # MUST be strings and fourth and fifth parameters are optional
@@ -20,15 +52,29 @@ def get_top_five(mainDataFrame, state, region, dataFrameRegion='REGION', dataFra
     # Return type is a list
     return topFiveTrees
 
+# Function to add the regions to the main df
+# NOTE: first parameter must be the main dataframe, second must be the states list
+# And third parameter must be a regions list
+def add_regions(mainDataFrame, statesList, regionsList):
+    # Create a df of only the states
+    onlyStatesDf = pd.DataFrame(statesList, columns=['STATE'])
+    # Create a df of only the regions
+    onlyRegionsDf = pd.DataFrame(regionsList, columns=['REGION'])
+
+    # Concat both of the previous df into one
+    regionsDf = pd.concat([onlyStatesDf, onlyRegionsDf], axis=1)
+
+    # Merge the original DataFrame with the regions DataFrame on the 'STATE' column
+    mainDataFrame = pd.merge(mainDataFrame, regionsDf, on='STATE', how='left')
+
+    # Return type is a dataframe
+    return mainDataFrame
 
 # Get the df of the mexican trees
 mexicanTreesDf = pd.read_csv('mexican_trees.csv')
 
-# Check how many states are in the db
-states = []
-for state in mexicanTreesDf['STATE']:
-    if state not in states:
-        states.append(state) # Store the states in states list
+# Get the states list
+states = get_df_states(mexicanTreesDf)
 
 # Create regions dictionary
 regionsDict = {
@@ -44,30 +90,11 @@ regionsDict = {
     'Southeast': ['Campeche', 'Quintana Roo', 'Tabasco', 'Yucatán']
 }
 
-# Create the regions list to store every state region
-regions = []
+# Create the regions list
+regions = create_regions_list(states)
 
-# Iterate over the states to find their region
-for state in states:
-    foundRegion = None
-
-    for region, statesList in regionsDict.items():
-        if state in statesList:
-            foundRegion = region
-            break
-
-    regions.append(foundRegion) # Store the region
-
-# Create a df of only the states
-onlyStatesDf = pd.DataFrame(states, columns=['STATE'])
-# Create a df of only the regions
-onlyRegionsDf = pd.DataFrame(regions, columns=['REGION'])
-
-# Concat both of the previous df into one
-regionsDf = pd.concat([onlyStatesDf, onlyRegionsDf], axis=1)
-
-# Merge the original DataFrame with the regions DataFrame on the 'STATE' column
-mexicanTreesDf = pd.merge(mexicanTreesDf, regionsDf, on='STATE', how='left')
+# Add the regions to the main dataframe
+mexicanTreesDf = add_regions(mexicanTreesDf, states, regions)
 
 # Implement function get_top_five
 topFiveTrees = get_top_five(mexicanTreesDf, 'Durango', 'Northwest')
