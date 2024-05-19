@@ -61,11 +61,3 @@ class Cost():
 
         result = 'The estimated cost of planting a tree in {} is: ${}'.format(self.state, cost)
         return result
-
-def main():
-    obj1=Cost('Michoacán',456)
-    print(obj1.getManPower())
-    print(obj1.setInfrastructure())
-    print(obj1.calculate())
-
-main()
