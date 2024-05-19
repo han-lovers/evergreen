@@ -21,7 +21,7 @@ class Trees:
         model = project.version(1).model
 
         # Get results based on model with confidence and overlap, low coinfidences give more results
-        result = model.predict(image_path, confidence=15, overlap=30).json()
+        result = model.predict(image_path, confidence=20, overlap=30).json()
 
         # Gets the class labels, only one for tree
         labels = [item["class"] for item in result["predictions"]]
