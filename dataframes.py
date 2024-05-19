@@ -53,3 +53,14 @@ regionsDf = pd.concat([onlyStatesDf, onlyRegionsDf], axis=1)
 
 # Merge the original DataFrame with the regions DataFrame on the 'STATE' column
 mexicanTreesDf = pd.merge(mexicanTreesDf, regionsDf, on='STATE', how='left')
+
+# Look for the trees in a specific region and state
+specificZoneTrees = mexicanTreesDf.loc[(mexicanTreesDf['REGION'] == 'Northwest') & (mexicanTreesDf['STATE'] == 'Durango')]
+
+# Get the top 5 trees in a specific region and state
+topFiveTrees = (specificZoneTrees['SPECIES'].value_counts()).head()
+topFiveTrees = topFiveTrees.index.to_list() # Transform the values into a list with the Species
+
+# Iterate in the top 5 to print them 1 by 1
+for i in range(len(topFiveTrees)):
+    print(f'The option {i + 1} is: {topFiveTrees[i]}')
