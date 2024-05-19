@@ -1,5 +1,5 @@
 import os
-
+import pandas as pd
 import streamlit as st
 from PIL import Image
 from geopy.geocoders import Nominatim
@@ -19,6 +19,8 @@ def getState(location):
     state = address.get('state', 'Not found')
     return state
 
+# Get the df of the mexican trees
+mexicanTreesDf = pd.read_csv('mexican_trees.csv')
 
 editedphoto = None
 #file upload
