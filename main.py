@@ -96,8 +96,8 @@ def compare_strings(stringOne, stringTwo):
 
 # Function that shows the first 5 images from the tree selected
 def TreeImages(query):
-    API_KEY = 'AIzaSyBJd7v-fc-vvvkObY8yBwIsLTaK4XG6yb0'
-    SEARCH_ENGINE_ID = '3386aa3648dd74cba'
+    API_KEY = 'AIzaSyD4VFmOvGchpqC16OUwXN9vQuv-17Bve_w'
+    SEARCH_ENGINE_ID = '56e35353263d94759'
 
     search_query = query + ' tree'
 
@@ -115,13 +115,13 @@ def TreeImages(query):
     results = response.json()['items']
 
     for item in results[:5]:
-        #st.image(item['link'])
-        st.write(item['link'])
+        # st.image(item['link'])
+        st.image(item['link'])
 
 # qualities of the selected tree
 def Maintenance(query):
-    API_KEY = 'AIzaSyBJd7v-fc-vvvkObY8yBwIsLTaK4XG6yb0'
-    SEARCH_ENGINE_ID = '3386aa3648dd74cba'
+    API_KEY = 'AIzaSyD4VFmOvGchpqC16OUwXN9vQuv-17Bve_w'
+    SEARCH_ENGINE_ID = '56e35353263d94759'
 
     search_query = query + ' tree care'
 
@@ -323,9 +323,9 @@ try:
 
         if st.button('View'):
             for i in range(len(topFiveTrees)):
-                #st.write(f"{topFiveTrees[i]}")
+                st.write(f"{topFiveTrees[i]}")
                 TreeImages(topFiveTrees[i])
-                st.image(TreeImages(topFiveTrees[i]))
+                # st.image(TreeImages(topFiveTrees[i]))
 
 
         # User chooses the main tree
